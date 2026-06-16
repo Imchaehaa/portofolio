@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAEHA LIM — Portfolio</title>
+  
+  <!-- Google Fonts: Syne for brutalist display headings, Inter for clean editorial text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Modern Reset and Variables */
+    :root {
+      --red: #FF0000;
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-light: #F9F9F9;
+      --gray-mid: #E5E5E5;
+      --gray-dark: #666666;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background-color: var(--red);
+      color: var(--black);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Selection Color */
+    ::selection {
+      background-color: var(--black);
+      color: var(--red);
+    }
+
+    /* Fixed Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background-color: var(--red);
+      border-bottom: 2px solid var(--black);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4%;
+      z-index: 1000;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.45rem;
+      letter-spacing: -1px;
+      text-decoration: none;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .nav-logo span {
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      border: 1px solid var(--black);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-item {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--black);
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+      padding: 5px 0;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background-color: var(--black);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-item:hover::after,
+    .nav-item.active::after {
+      width: 100%;
+    }
+
+    /* Mobile Hamburger Menu */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      z-index: 1001;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background-color: var(--black);
+      transition: var(--transition-smooth);
+    }
+
+    /* App State Layout Switchers */
+    body[data-current-view="landing"] {
+      background-color: var(--red);
+    }
+
+    body[data-current-view="landing"] .navbar {
+      display: none !important;
+    }
+
+    body[data-current-view="landing"] .viewport-content {
+      margin-top: 0 !important;
+      min-height: 100vh !important;
+    }
+
+    body[data-current-view="landing"] .view-section {
+      min-height: 100vh !important;
+    }
+
+    body[data-current-view="landing"] .landing-container {
+      min-height: 100vh !important;
+      padding: 5vh 4% !important;
+      justify-content: flex-start !important;
+    }
+
+    body[data-current-view="landing"] .landing-grid {
+      margin-top: 0 !important;
+    }
+
+    body[data-current-view="landing"] .landing-meta-footer {
+      display: none !important;
+    }
+
+    body[data-current-view="landing"] .nav-item {
+      color: var(--black);
+    }
+
+    body[data-current-view="landing"] .nav-item::after {
+      background-color: var(--black);
+    }
+
+    /* Content view backgrounds are Crisp White */
+    body:not([data-current-view="landing"]) {
+      background-color: var(--white);
+    }
+
+    body:not([data-current-view="landing"]) .navbar {
+      background-color: var(--red);
+      border-bottom: 2px solid var(--black);
+    }
+
+    /* Content Container */
+    .viewport-content {
+      margin-top: 70px;
+      min-height: calc(100vh - 70px);
+      width: 100%;
+      position: relative;
+    }
+
+    /* Views */
+    .view-section {
+      display: none;
+      width: 100%;
+      min-height: calc(100vh - 70px);
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* LANDING PAGE: GEOMETRIC TYPOGRAPHY GRID */
+    .landing-container {
+      position: relative;
+      width: 100%;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      background-color: var(--red);
+      overflow: hidden;
+      padding: 6vh 4% 4vh 4%;
+      box-sizing: border-box;
+    }
+
+    .landing-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8vh;
+      margin-top: auto;
+      margin-bottom: auto;
+      user-select: none;
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: 1.3fr 1.4fr 1.1fr 2.4fr 1.8fr;
+      width: 100%;
+      gap: 15px;
+      align-items: center;
+    }
+
+    /* Core word design in static grid */
+    .grid-cell {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1rem, 4.8vw, 11rem);
+      line-height: 0.82;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      background: none;
+      outline: none;
+      text-align: left;
+      padding: 4px 0;
+      white-space: nowrap;
+      display: inline-block;
+      letter-spacing: -0.05em;
+    }
+
+    /* Interactive hover state */
+    .grid-cell:hover {
+      color: var(--white);
+      transform: scale(1.05);
+    }
+
+    .grid-cell:active {
+      transform: scale(0.97);
+    }
+
+    /* Landing Bottom Meta Footer */
+    .landing-meta-footer {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1.5px solid var(--black);
+      padding-top: 15px;
+      margin-top: 30px;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      text-transform: uppercase;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .landing-meta-right {
+      text-align: right;
+      max-width: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .landing-container {
+        padding: 4vh 4% 3vh 4%;
+      }
+      .grid-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .grid-cell {
+        font-size: clamp(2.2rem, 9.5vw, 5rem);
+        line-height: 0.9;
+        text-align: center;
+        width: 100%;
+      }
+      .landing-meta-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .landing-meta-right {
+        text-align: center;
+        max-width: 100%;
+      }
+    }
+
+    /* COMMON EDITORIAL LAYOUT FOR CONTENT PAGES */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 4% 120px 4%;
+    }
+
+    .page-header {
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 20px;
+      margin-bottom: 50px;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: -1.5px;
+    }
+
+    .page-subtitle {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--gray-dark);
+      margin-top: 10px;
+    }
+
+    /* WHO SECTION LAYOUT: editorial fashion magazine layout */
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr;
+      gap: 60px;
+      align-items: flex-start;
+    }
+
+    .editorial-visual {
+      position: relative;
+    }
+
+    .portrait-frame {
+      width: 100%;
+      border: 3px solid var(--black);
+      padding: 15px;
+      background-color: var(--white);
+      transition: var(--transition-smooth);
+    }
+
+    .portrait-frame:hover {
+      transform: rotate(-1.5deg) scale(1.01);
+    }
+
+    .portrait-img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(1);
+      transition: var(--transition-smooth);
+    }
+
+    .portrait-frame:hover .portrait-img {
+      filter: grayscale(0);
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .who-hero-heading {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+
+    .who-tag-line {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      text-transform: uppercase;
+      color: var(--red);
+      border-top: 2px solid var(--black);
+      border-bottom: 2px solid var(--black);
+      padding: 15px 0;
+      margin: 15px 0;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    .meta-table tr {
+      border-bottom: 1px solid var(--gray-mid);
+    }
+
+    .meta-table td {
+      padding: 14px 0;
+      font-size: 1.05rem;
+    }
+
+    .meta-label {
+      font-weight: 700;
+      width: 30%;
+      color: var(--black);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-value {
+      color: #111;
+      font-weight: 400;
+    }
+
+    .profile-bio {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+      text-align: justify;
+    }
+
+    .profile-val {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      font-weight: 500;
+      color: var(--black);
+      padding-left: 20px;
+      border-left: 4px solid var(--red);
+      background-color: var(--gray-light);
+      padding: 20px;
+    }
+
+    /* FASHION EDITORIAL RETAIL LOOK FOR WHO SECTION */
+    .who-editorial-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 100px;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+
+    .who-title-block {
+      margin-bottom: 50px;
+    }
+
+    .who-section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .who-huge-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.85;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      color: var(--black);
+      margin: 0 0 15px 0;
+    }
+
+    .who-title-descriptor {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .who-editorial-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .copy-line-highlight {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--black);
+      letter-spacing: -1px;
+    }
+
+    .copy-main {
+      font-size: clamp(1.05rem, 1.8vw, 1.15rem);
+      line-height: 1.8;
+      color: #333;
+      font-weight: 500;
+      word-break: keep-all;
+    }
+
+    /* Education Block Styled simple & raw like a scan list */
+    .who-education-block {
+      margin-bottom: 60px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      letter-spacing: 0.05em;
+      color: var(--black);
+    }
+
+    .who-education-block .edu-role {
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .who-education-block .edu-school {
+      color: var(--black);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .who-education-block .edu-dept {
+      color: var(--gray-dark);
+    }
+
+    /* Philosophy Poster Block */
+    .philosophy-poster {
+      border-top: 1px solid var(--black);
+      padding-top: 40px;
+      margin-top: 40px;
+    }
+
+    .philosophy-poster .phil-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gray-dark);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .philosophy-poster blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+      font-weight: 800;
+      line-height: 1.4;
+      color: var(--black);
+      letter-spacing: -0.5px;
+      border-left: 6px solid var(--red);
+      padding-left: 24px;
+      margin: 0;
+      word-break: keep-all;
+    }
+
+    .who-visual-column {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      position: sticky;
+      top: 100px;
+    }
+
+    /* Clean frame, showing only the stunning portrait itself */
+    .fashion-pure-portrait {
+      width: 100%;
+      max-width: 320px;
+      overflow: hidden;
+      box-shadow: none;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fashion-pure-portrait:hover {
+      transform: scale(1.02);
+    }
+
+    .fashion-portrait-img-pure {
+      width: 100%;
+      aspect-ratio: 9/13; /* Vertical/Portrait slim ratio */
+      object-fit: cover;
+      display: block;
+      filter: grayscale(1);
+      transition: filter 0.6s ease;
+    }
+
+    .fashion-pure-portrait:hover .fashion-portrait-img-pure {
+      filter: grayscale(0);
+    }
+
+    @media (max-width: 900px) {
+      .who-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+      .who-visual-column {
+        justify-content: center;
+        position: static;
+        order: -1; /* Image first on mobile */
+      }
+      .fashion-pure-portrait {
+        max-width: 280px;
+      }
+    }
+
+    /* WORK SECTION: filtering visual items */
+    .filter-wrapper {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 24px;
+      border: 2px solid var(--black);
+      background-color: var(--white);
+      color: var(--black);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .filter-btn:hover {
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .filter-btn.active {
+      background-color: var(--red);
+      color: var(--black);
+    }
+
+    /* Portfolio Grid */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 40px;
+    }
+
+    .work-card {
+      border: 2px solid var(--black);
+      overflow: hidden;
+      background-color: var(--white);
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .work-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .work-img-container {
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      border-bottom: 2px solid var(--black);
+      position: relative;
+    }
+
+    .work-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .work-card:hover .work-img {
+      transform: scale(1.05);
+    }
+
+    .work-tag {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--black);
+      color: var(--white);
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .work-content {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .work-info-part h3 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .work-info-part p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+    }
+
+    .work-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background-color: var(--black);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+      width: fit-content;
+      margin-top: auto;
+      border: 2px solid var(--black);
+    }
+
+    .work-link-btn:hover {
+      background-color: var(--white);
+      color: var(--black);
+    }
+
+    /* EYE SECTION: MOODBOARD */
+    .eye-intro {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      max-width: 700px;
+      margin-bottom: 45px;
+    }
+
+    .eye-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
+
+    .eye-item {
+      position: relative;
+      border: 2px solid var(--black);
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .eye-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.8);
+      transition: var(--transition-smooth);
+    }
+
+    .eye-item:hover .eye-img {
+      filter: grayscale(0);
+      transform: scale(1.08);
+    }
+
+    .eye-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      padding: 15px;
+      opacity: 0;
+      transition: var(--transition-smooth);
+      pointer-events: none;
+    }
+
+    .eye-item:hover .eye-overlay {
+      opacity: 1;
+    }
+
+    .eye-overlay span {
+      color: var(--white);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border: 4px solid var(--white);
+      animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 2.5rem;
+      cursor: pointer;
+      font-weight: 300;
+    }
+
+    /* CURRENTLY SECTION: BENTO LAYOUT */
+    .bento-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .bento-card {
+      border: 2px solid var(--black);
+      padding: 40px;
+      background-color: var(--white);
+      transition: var(--transition-smooth);
+    }
+
+    .bento-card:hover {
+      box-shadow: 8px 8px 0px var(--black);
+      transform: translate(-4px, -4px);
+    }
+
+    .bento-card.wide {
+      grid-column: span 2;
+    }
+
+    .bento-card-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bento-card-title span {
+      font-size: 0.85rem;
+      color: var(--red);
+      font-family: var(--font-body);
+      border: 1px solid var(--red);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* Tools tag list */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tech-tag {
+      padding: 10px 18px;
+      background-color: var(--gray-light);
+      border: 1.5px solid var(--black);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .tech-tag:hover {
+      background-color: var(--red);
+      color: var(--black);
+    }
+
+    /* List items in currently section */
+    .currently-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .currently-list li {
+      position: relative;
+      padding-left: 30px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .currently-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-weight: bold;
+    }
+
+    .obsession-title {
+      font-weight: 700;
+      color: var(--black);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .obsession-desc {
+      color: var(--gray-dark);
+      font-size: 0.95rem;
+    }
+
+    /* TOWARD SECTION */
+    .toward-layout {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .toward-quote {
+      font-family: var(--font-display);
+      font-sizing: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 45px;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .toward-manifesto {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: #222;
+      text-align: justify;
+      margin-bottom: 60px;
+      text-justify: inter-word;
+    }
+
+    .contact-block {
+      border: 3px solid var(--black);
+      padding: 40px;
+      background-color: var(--gray-light);
+      border-radius: 0;
+      text-align: center;
+    }
+
+    .contact-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .contact-email-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 15px 35px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      margin-top: 15px;
+    }
+
+    .contact-email-btn:hover {
+      background-color: var(--red);
+      color: var(--black);
+      box-shadow: 5px 5px 0px var(--black);
+      transform: translate(-2px, -2px);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: var(--black);
+      color: var(--white);
+      padding: 14px 28px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.95rem;
+      opacity: 0;
+      z-index: 3000;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* RESPONSIVE DESIGN (Bentos, Eye Grids, Editorial Layouts) */
+    @media (max-width: 992px) {
+      .editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .bento-container {
+        grid-template-columns: 1fr;
+      }
+      .bento-card.wide {
+        grid-column: span 1;
+      }
+      .eye-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 5%;
+      }
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: var(--red);
+        border-bottom: 2px solid var(--black);
+        flex-direction: column;
+        gap: 0;
+        text-align: center;
+        max-height: 0;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+      }
+      .nav-links.active {
+        max-height: 350px;
+      }
+      .nav-item {
+        display: block;
+        padding: 20px 0;
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,0.15);
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      /* Hamburger animation when active */
+      .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+      }
+      .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -7px);
+      }
+      .eye-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .container {
+        padding: 60px 5% 90px 5%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .eye-grid {
+        grid-template-columns: 1fr;
+      }
+      .meta-label {
+        width: 40%;
+      }
+    }
+  </style>
+</head>
+<body data-current-view="landing">
+
+  <!-- Fixed Top Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a onclick="navigateTo('landing')" class="nav-logo" id="nav-logo">PORTFOLIO</a>
+    
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a onclick="navigateTo('who')" class="nav-item" data-tab-name="who">WHO</a></li>
+      <li><a onclick="navigateTo('work')" class="nav-item" data-tab-name="work">WORK</a></li>
+      <li><a onclick="navigateTo('eye')" class="nav-item" data-tab-name="eye">EYE</a></li>
+      <li><a onclick="navigateTo('currently')" class="nav-item" data-tab-name="currently">CURRENTLY</a></li>
+      <li><a onclick="navigateTo('toward')" class="nav-item" data-tab-name="toward">TOWARD</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Views Container -->
+  <main class="viewport-content">
+
+    <!-- 0. LANDING SCREEN (GEOMETRIC TYPOGRAPHY GRID) -->
+    <section id="view-landing" class="view-section active">
+      <div class="landing-container">
+        <div class="landing-grid">
+          <!-- Row 1 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+          <!-- Row 2 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+          <!-- Row 3 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+          <!-- Row 4 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+          <!-- Row 5 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+          <!-- Row 6 -->
+          <div class="grid-row">
+            <button onclick="navigateTo('who')" class="grid-cell">WHO</button>
+            <button onclick="navigateTo('work')" class="grid-cell">WORK</button>
+            <button onclick="navigateTo('eye')" class="grid-cell">EYE</button>
+            <button onclick="navigateTo('currently')" class="grid-cell">CURRENTLY</button>
+            <button onclick="navigateTo('toward')" class="grid-cell">TOWARD</button>
+          </div>
+        </div>
+
+        <!-- Meta info footer similar to the photo's cargo aesthetics -->
+        <div class="landing-meta-footer">
+          <div class="landing-meta-left">
+            <span>IM CHAE HA / 임채하</span>
+          </div>
+          <div class="landing-meta-right">
+            <span>Visual & Fashion Design Portfolio. Studied at Hallym University. Custom Made Cargo Grid. Click any text to enter. All rights reserved &copy; 2026.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. WHO SECTION (PROFILE) -->
+    <section id="view-who" class="view-section">
+      <div class="container" style="padding: 100px 4% 120px 4%; max-width: 1200px; margin: 0 auto;">
+        
+        <div class="page-header" style="padding-bottom: 24px;">
+          <h2 class="page-title" style="display: flex; flex-direction: column; gap: 8px; line-height: 1;">
+            <span>WHO</span>
+            <span style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-family: var(--font-mono); font-weight: 500; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase;">PROFILE</span>
+          </h2>
+        </div>
+        
+        <div class="who-editorial-grid">
+          
+          <!-- Detailed Typography and Descriptions -->
+          <div class="profile-info-editorial">
+            <div class="who-title-block">
+              <h1 class="who-huge-name">IM CHAEHA</h1>
+            </div>
+
+            <div class="who-editorial-copy">
+              <p class="copy-line-highlight"><span style="border-bottom: 4px solid var(--red); display: inline-block; padding-bottom: 8px; line-height: 1.1;">"옷을 입히듯, 화면을 입힌다."</span></p>
+              <p class="copy-main">
+                패션과 디자인, 그리고 AI를 통해 새로운 시각 경험을 만듭니다.<br>
+                옷을 입히듯 화면을 디자인하며, 디지털 환경 속 새로운 이야기를 설계합니다.
+              </p>
+            </div>
+
+            <!-- Minimalist Education Block -->
+            <div class="who-education-block">
+              <div class="edu-role">Visual & Fashion Designer</div>
+              <div class="edu-school">Hallym University</div>
+              <div class="edu-dept">디지털인문예술 전공</div>
+              <div class="edu-dept">광고홍보학과 부전공</div>
+            </div>
+
+            <!-- Highly Stylized Philosophy Poster Block -->
+            <div class="philosophy-poster">
+              <p class="phil-title">PHILOSOPHY</p>
+              <blockquote>
+                “트렌드를 좇지 않는다.<br><br>내가 가고 싶은 방향이<br>곧 디자인이다.”
+              </blockquote>
+            </div>
+          </div>
+
+          <!-- Pure Fashion Portrait Layout (Slim and Vertical) -->
+          <div class="who-visual-column">
+            <div class="fashion-pure-portrait">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Im Chaeha Fashion Silhouette Portrait" class="fashion-portrait-img-pure">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. WORK SECTION (PROJECT GALLERY) -->
+    <section id="view-work" class="view-section">
+      <div class="container">
+        <div class="page-header" style="padding-bottom: 24px;">
+          <h2 class="page-title" style="display: flex; flex-direction: column; gap: 8px; line-height: 1;">
+            <span>WORK</span>
+            <span style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-family: var(--font-mono); font-weight: 500; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase;">PROJECTS</span>
+          </h2>
+        </div>
+
+        <!-- Dynamic Category Filter -->
+        <div class="filter-wrapper">
+          <button class="filter-btn active" data-filter="fashion">FASHION</button>
+          <button class="filter-btn" data-filter="digital">DIGITAL</button>
+          <button class="filter-btn" data-filter="visual">VISUAL</button>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="work-grid" id="work-grid">
+          
+          <!-- FASHION: 천민 reinterpretation -->
+          <div class="work-card" data-category="fashion">
+            <div class="work-img-container">
+              <span class="work-tag">Fashion</span>
+              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80" alt="천민, 재해석되다" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>천민, 재해석되다</h3>
+                <p>조선시대 최하층 계급이었던 천민 신분의 전통 의복 실루엣과 소재를 추적하여 현대적인 스트리트 의류 스타일로 과감하게 버무렸습니다. 상의 오버사이징 레이어링, 하의 벌룬 실루엣, 맞춤 슈즈 및 거친 질감의 부속 액세서리 구조체까지 세밀하게 분해·재결합했습니다.</p>
+              </div>
+              <span class="work-link-btn" onclick="openWorkDetail('fashion1')">View Editorial Details</span>
+            </div>
+          </div>
+
+          <!-- DIGITAL: K-콘텐츠 -->
+          <div class="work-card" data-category="digital">
+            <div class="work-img-container">
+              <span class="work-tag">Digital</span>
+              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="K-콘텐츠 산업 분석" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>K-콘텐츠 산업 분석</h3>
+                <p>한국 영화·드라마 등 엔터테인먼트 전반의 경제적 임팩트, 연계 산업 성장 전개도, 인공지능 기술 결합 시나리오를 심도 있게 정리하고, 사용자의 데이터 상호작용이 일어나는 반응형 인터랙티브 웹 포털로 설계 및 배포했습니다.</p>
+              </div>
+              <a href="https://imchaehaa.github.io/my-assignment-/" target="_blank" rel="noopener noreferrer" class="work-link-btn">Launch Website &rarr;</a>
+            </div>
+          </div>
+
+          <!-- DIGITAL: 절약한끼 -->
+          <div class="work-card" data-category="digital">
+            <div class="work-img-container">
+              <span class="work-tag">Digital</span>
+              <img src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&w=800&q=80" alt="절약한끼" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>절약한끼 (Save-Hankki)</h3>
+                <p>대학생 및 자취생을 저격하는 실질 주거·생활비 절약 플랫폼입니다. 깔끔하게 쪼개진 지출 가계부, 공동구매 소통창구, 그리고 냉장고 자투리 식재료를 업로드하면 최적의 레시피를 인스턴트 가이드해주는 영리한 AI 모델 추천 필터를 지원합니다.</p>
+              </div>
+              <a href="https://save-hankki.vercel.app" target="_blank" rel="noopener noreferrer" class="work-link-btn">Launch Application &rarr;</a>
+            </div>
+          </div>
+
+          <!-- VISUAL: Poster 1 -->
+          <div class="work-card" data-category="visual">
+            <div class="work-img-container">
+              <span class="work-tag">Visual Poster 01</span>
+              <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80" alt="Visual Poster 1" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>Aesthetic Fluid Dynamics</h3>
+                <p>우아한 플루이드 유동 그래픽 구조를 모티브로 삼아, 현대 한글의 타이포그래피 격자들과 유기적인 곡선 프레임들을 입체적으로 공존시킨 실험적 시물레이션 아트 포스터 시리즈입니다.</p>
+              </div>
+              <span class="work-link-btn" onclick="openLightbox('https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=80', 'Poster 01 : Aesthetic Fluid Dynamics')">Vandal Zoom Poster</span>
+            </div>
+          </div>
+
+          <!-- VISUAL: Poster 2 -->
+          <div class="work-card" data-category="visual">
+            <div class="work-img-container">
+              <span class="work-tag">Visual Poster 02</span>
+              <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80" alt="Visual Poster 2" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>Deconstructive Typo-Collage</h3>
+                <p>미소진 구조에서 오는 스위스 스타일 타이포그래피 모더니즘의 과격한 분해를 실험했습니다. 오직 블랙과 화이트, 레드의 강렬한 그리드 파괴 레이아웃 패러다임을 연출합니다.</p>
+              </div>
+              <span class="work-link-btn" onclick="openLightbox('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1200&q=80', 'Poster 02 : Deconstructive Typo-Collage')">Vandal Zoom Poster</span>
+            </div>
+          </div>
+
+          <!-- VISUAL: Poster 3 -->
+          <div class="work-card" data-category="visual">
+            <div class="work-img-container">
+              <span class="work-tag">Visual Poster 03</span>
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Visual Poster 3" class="work-img">
+            </div>
+            <div class="work-content">
+              <div class="work-info-part">
+                <h3>Chromatographic Illusion</h3>
+                <p>채도를 극한으로 비튼 인공적인 색 배열 효과를 이용해 가상 디스플레이 속 옷감 직조를 디지털 텍스처 패치로 직관화시킨 초실재적인 씬 그래픽 포스터입니다.</p>
+              </div>
+              <span class="work-link-btn" onclick="openLightbox('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80', 'Poster 03 : Chromatographic Illusion')">Vandal Zoom Poster</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. EYE SECTION (CURATED MOODBOARD) -->
+    <section id="view-eye" class="view-section">
+      <div class="container">
+        <div class="page-header" style="padding-bottom: 24px;">
+          <h2 class="page-title" style="display: flex; flex-direction: column; gap: 8px; line-height: 1;">
+            <span>EYE</span>
+            <span style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-family: var(--font-mono); font-weight: 500; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase;">Curation</span>
+          </h2>
+        </div>
+
+        <p style="font-size: 1.1rem; font-weight: 400; color: var(--gray-dark); margin-bottom: 32px; line-height: 1.6;">
+          "내 눈을 만든 것들" — 취향의 기저를 채우는 파편들, 아방가르드 아카이브 및 시각 무드보드입니다.
+        </p>
+
+        <!-- Eye Curation Grid: 10 images -->
+        <div class="eye-grid">
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/chanel_runway_90s_1781621479071.jpg', '01 1990 Chanel Runway')">
+            <img src="/src/assets/images/chanel_runway_90s_1781621479071.jpg" alt="Mood 01" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>01. 1990 Chanel Runway</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/ysl_runway_90s_1781621535663.jpg', '02 1990 Saint Laurent Runway')">
+            <img src="/src/assets/images/ysl_runway_90s_1781621535663.jpg" alt="Mood 02" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>02. 1990 Saint Laurent Runway</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/coach_campaign_90s_1781621602501.jpg', '03 2018 Coach Campaign')">
+            <img src="/src/assets/images/coach_campaign_90s_1781621602501.jpg" alt="Mood 03" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>03. 2018 Coach Campaign</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/polo_runway_2025_1781621830645.jpg', '04 2025 Polo Ralph Lauren Runway')">
+            <img src="/src/assets/images/polo_runway_2025_1781621830645.jpg" alt="Mood 04" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>04. 2025 Polo Ralph Lauren Runway</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/trends_roundup_2020_1781621897050.jpg', '05 2020 Trends Round Up')">
+            <img src="/src/assets/images/trends_roundup_2020_1781621897050.jpg" alt="Mood 05" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>05. 2020 Trends Round Up</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/miu_miu_spread_layout_1781621958378.jpg', '06 Fashion Magazine')">
+            <img src="/src/assets/images/miu_miu_spread_layout_1781621958378.jpg" alt="Mood 06" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>06. Fashion Magazine</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/lookbook_collage_7_1781622030261.jpg', '07 Lookbook Design')">
+            <img src="/src/assets/images/lookbook_collage_7_1781622030261.jpg" alt="Mood 07" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>07. Lookbook Design</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/typography_poster_8_1781622090886.jpg', '08 Typography Poster')">
+            <img src="/src/assets/images/typography_poster_8_1781622090886.jpg" alt="Mood 08" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>08. Typography Poster</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/punk_brutalist_poster_9_1781622148150.jpg', '09 Experimental Type Design')">
+            <img src="/src/assets/images/punk_brutalist_poster_9_1781622148150.jpg" alt="Mood 09" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>09. Experimental Type Design</span>
+            </div>
+          </div>
+
+          <div class="eye-item" onclick="openLightbox('/src/assets/images/futuristic_glitch_model_10_1781622216570.jpg', '10 AI Visual Experiment')">
+            <img src="/src/assets/images/futuristic_glitch_model_10_1781622216570.jpg" alt="Mood 10" class="eye-img" referrerPolicy="no-referrer">
+            <div class="eye-overlay">
+              <span>10. AI Visual Experiment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CURRENTLY SECTION (INTERESTS / STATUS) -->
+    <section id="view-currently" class="view-section">
+      <div class="container">
+        <div class="page-header">
+          <h2 class="page-title">CURRENTLY</h2>
+          <p class="page-subtitle">지금 손끝에 맞닿은 작업 도구와 학구적인 몰입, 내일을 위한 실험들입니다.</p>
+        </div>
+
+        <div class="bento-container">
+          
+          <!-- Bento Box 1: Tools I use -->
+          <div class="bento-card">
+            <h3 class="bento-card-title">요즘 쓰는 툴 <span>Tools</span></h3>
+            
+            <div class="tool-sub-group" style="margin-bottom: 28px;">
+              <h4 style="font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--black); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--black);"></span>
+                Design
+              </h4>
+              <div class="tech-tags">
+                <span class="tech-tag">Figma</span>
+                <span class="tech-tag">Illustrator</span>
+                <span class="tech-tag">Photoshop</span>
+              </div>
+            </div>
+
+            <div class="tool-sub-group">
+              <h4 style="font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--red);"></span>
+                AI
+              </h4>
+              <div class="tech-tags">
+                <span class="tech-tag">ChatGPT</span>
+                <span class="tech-tag">Claude</span>
+                <span class="tech-tag">Gemini</span>
+                <span class="tech-tag">Google AI Studio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Box 2: Next Steps -->
+          <div class="bento-card">
+            <h3 class="bento-card-title">다음에 배울 것 <span>Learning</span></h3>
+            <ul class="currently-list">
+              <li>
+                <span class="obsession-title">→ Framer 기반 인터랙티브 웹 디자인</span>
+                <span class="obsession-desc">정적인 화면을 넘어 사용자가 직접 탐색하고 경험할 수 있는 인터랙티브 웹사이트를 제작하고 싶습니다.</span>
+              </li>
+              <li>
+                <span class="obsession-title">→ After Effects 모션 그래픽</span>
+                <span class="obsession-desc">움직임과 리듬을 활용해 포스터와 브랜딩 작업에 새로운 시각적 경험을 더하고 싶습니다.</span>
+              </li>
+              <li>
+                <span class="obsession-title">→ Blender 3D 비주얼 디자인</span>
+                <span class="obsession-desc">패션과 그래픽 디자인을 입체적인 공간으로 확장하여 새로운 비주얼 표현 방식을 탐구하고 싶습니다.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Bento Box 3: My Obsessions (Wide) -->
+          <div class="bento-card wide">
+            <h3 class="bento-card-title">요즘 빠져 있는 것들 <span>Obsessions</span></h3>
+            <ul class="currently-list">
+              <li>
+                <span class="obsession-title">→ 1990–2000년대 패션쇼 아카이브</span>
+                <span class="obsession-desc">Alexander McQueen, John Galliano, Helmut Lang 등 다양한 디자이너들의 아카이브 컬렉션을 보며 패션이 하나의 이야기와 경험으로 완성되는 방식을 관찰하고 있습니다.</span>
+              </li>
+              <li>
+                <span class="obsession-title">→ 에디토리얼 레이아웃</span>
+                <span class="obsession-desc">패션 매거진과 룩북 속 타이포그래피, 여백, 이미지 구성 방식을 연구하며 디자인 감각을 확장하고 있습니다.</span>
+              </li>
+              <li>
+                <span class="obsession-title">→ AI 비주얼 실험</span>
+                <span class="obsession-desc">생성형 AI를 활용해 새로운 시각 언어를 만들고, 패션과 디지털 디자인의 접점을 탐구하고 있습니다.</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. TOWARD SECTION (MANIFESTO) -->
+    <section id="view-toward" class="view-section">
+      <div class="container">
+        <div class="page-header" style="padding-bottom: 24px;">
+          <h2 class="page-title" style="display: flex; flex-direction: column; gap: 8px; line-height: 1;">
+            <span>TOWARD</span>
+            <span style="font-size: clamp(1rem, 2.5vw, 1.8rem); font-family: var(--font-mono); font-weight: 500; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase;">Vision</span>
+          </h2>
+          <p class="page-subtitle">변화하는 시대의 중심에서 붙잡을 디자인 가치와 장기 지향점을 나눕니다.</p>
+        </div>
+
+        <div class="toward-layout" style="max-width: 900px; margin: 0 auto; text-align: center; padding: 40px 0 80px 0;">
+          <!-- 대표 카피: "패션과 디지털 사이의 새로운 언어를 만든다." (가장 크고 밑줄 강조) -->
+          <div class="toward-hero" style="margin-bottom: 60px;">
+            <p style="font-size: clamp(1.5rem, 4.5vw, 2.8rem); font-weight: 800; font-family: var(--font-display); line-height: 1.35; color: var(--black); margin: 0 auto; max-width: 800px; word-break: keep-all; letter-spacing: -0.02em;">
+              <span style="border-bottom: 4px solid var(--red); display: inline-block; padding-bottom: 12px; line-height: 1.35;">"패션과 디지털 사이의 새로운 언어를 만든다."</span>
+            </p>
+          </div>
+
+          <!-- 선언문 본문 (Manifesto) -->
+          <div class="toward-manifesto-content" style="font-size: clamp(1.1rem, 2vw, 1.25rem); line-height: 2.1; color: var(--black); text-align: center; max-width: 700px; margin: 0 auto; font-weight: 400; letter-spacing: -0.01em; word-break: keep-all;">
+            <p style="margin-bottom: 45px; font-weight: 700; font-size: clamp(1.4rem, 2.8vw, 1.8rem); line-height: 1.6; letter-spacing: 0.1em; color: var(--red);">
+              패션.<br>
+              디지털.<br>
+              AI.
+            </p>
+
+            <p style="margin-bottom: 45px; color: var(--gray-dark); font-weight: 500;">
+              서로 다른 영역처럼 보이지만<br>
+              저는 이 세 가지를 하나의 흐름으로 바라봅니다.
+            </p>
+
+            <p style="margin-bottom: 45px; font-weight: 500; color: var(--black);">
+              옷을 입히듯 화면을 디자인하고,<br>
+              기술을 통해 새로운 시각 경험을 설계하며,<br>
+              사람들의 기억에 남는 이야기를 만들고 싶습니다.
+            </p>
+
+            <p style="margin-bottom: 45px; color: var(--gray-dark); font-weight: 500;">
+              트렌드를 좇기보다<br>
+              나만의 방향을 만들고,
+            </p>
+
+            <p style="font-weight: 700; color: var(--black); font-size: clamp(1.15rem, 2.2vw, 1.35rem); line-height: 1.8;">
+              패션과 기술의 경계를 넘나드는<br>
+              디자이너로 성장하고자 합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox Overlay for Image Zoom -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img src="" alt="Lightbox View" class="lightbox-img" id="lightbox-img">
+    <p id="lightbox-caption" style="color: var(--white); margin-top: 15px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; text-align: center; font-size: 1.1rem; letter-spacing: 0.5px;"></p>
+  </div>
+
+  <!-- Toast Feedback Portal -->
+  <div class="toast" id="toast">이메일 주소가 복사되었습니다.</div>
+
+  <!-- Vanilla JavaScript Navigation and Interactive Logic -->
+  <script>
+    // Navigation logic (Tab Switcher) supported by Hash routing
+    function navigateTo(tabName) {
+      // Toggle body visual level styling configuration
+      document.body.setAttribute('data-current-view', tabName);
+      
+      // Update browser URL hash (making Vercel/GitHub Pages shareable links possible)
+      if (tabName === 'landing') {
+        history.pushState(null, null, ' '); // clears hash cleanly without triggering jump
+      } else {
+        location.hash = tabName;
+      }
+
+      // Hide all content containers, activate the selected one
+      const sections = document.querySelectorAll('.view-section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+
+      const currentSection = document.getElementById('view-' + tabName);
+      if (currentSection) {
+        currentSection.classList.add('active');
+        // Scroll cleanly to top of view
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      // Sync active classes on navbar items
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-tab-name') === tabName) {
+          item.classList.add('active');
+        }
+      });
+
+      // Collapse mobile menu if active
+      const navLinks = document.getElementById('nav-links');
+      const menuToggle = document.getElementById('menu-toggle');
+      if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        menuToggle.classList.remove('active');
+      }
+    }
+
+    // Toggle Mobile Navigation links overlay
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.getElementById('menu-toggle');
+      const navLinks = document.getElementById('nav-links');
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+          menuToggle.classList.toggle('active');
+          navLinks.classList.toggle('active');
+        });
+      }
+
+      // Check current Hash in URL on page mount/fresh loads
+      handleHashNavigation();
+
+      // Listen to back-button browser native transitions
+      window.addEventListener('hashchange', handleHashNavigation);
+
+      // Initialize Work Filters
+      setupFilters();
+    });
+
+    function handleHashNavigation() {
+      const hash = location.hash.replace('#', '').toLowerCase();
+      const validTabs = ['who', 'work', 'eye', 'currently', 'toward'];
+      
+      if (hash && validTabs.includes(hash)) {
+        navigateTo(hash);
+      } else {
+        navigateTo('landing');
+      }
+    }
+
+    // WORK Tab Filtering Systems
+    function setupFilters() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const workCards = document.querySelectorAll('.work-card');
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Sync button selection
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filterValue = btn.getAttribute('data-filter');
+
+          workCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            
+            // Grid animations on hide/reveal
+            if (filterValue === 'all' || cardCategory === filterValue) {
+              card.style.display = 'flex';
+              card.style.animation = 'fadeIn 0.4s ease forwards';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Programmatically trigger the default filter on setup
+      const activeBtn = document.querySelector('.filter-btn.active');
+      if (activeBtn) {
+        activeBtn.click();
+      }
+    }
+
+    // Project Detail Navigation redirection or specific alert modals
+    function openWorkDetail(projectId) {
+      if (projectId === 'fashion1') {
+        openLightbox('https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80', '천민, 재해석되다 (The Outcast, Reinterpreted) — Fashion Collection Layout');
+      }
+    }
+
+    // Lightbox Modal for Zooming Images
+    function openLightbox(imgSrc, caption) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+
+      if (lightbox && lightboxImg && lightboxCaption) {
+        lightboxImg.src = imgSrc;
+        lightboxCaption.innerText = caption || 'Curated Mood Archive';
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // block viewport scrolling while zooming
+      }
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // restore scrolling capability
+      }
+    }
+
+    // Close lightbox on clicking dark overlay background directly
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') {
+        closeLightbox();
+      }
+    });
+
+    // Copy to Clipboard with User Toast notification feedback
+    function copyEmailToClipboard(emailText) {
+      navigator.clipboard.writeText(emailText).then(() => {
+        showToast('이메일 주소가 복사되었습니다: ' + emailText);
+      }).catch(err => {
+        showToast('복사 중 오류가 발생했습니다. 직접 복사해주세요.');
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.innerText = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+    }
+  </script>
+</body>
+</html>
